@@ -7,6 +7,8 @@
 
     <!-- Load D3 from site -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="chart.js"></script>
+    <script src="compute.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- Also include Mathjax-->
@@ -21,24 +23,35 @@
   <body>
     <div class=container-fluid>
       <!-- Bias Variance Explorer Section -->
-      <h1 class="font-weight-light">Bias Variance Explorer</h1>
+      <!-- <h1 class="font-weight-light">Bias Variance Explorer</h1> -->
+      <div class="row"></div>
+        <!-- here's the div our chart will be injected into -->
+        <div class="chart-container"></div>
+
+        <!-- these will be made useful in the script below -->
+        <button class="train-data btn btn-primary">Change Training Data</button>
+        <!-- <button class="test-data btn btn-primary">Change Test Data</button> -->
+        <button class="save-roc btn btn-primary">Save ROC Curve</button>
+        <button class="cycle-k btn btn-primary">K = 25</button> 
+        <button class="clear-roc btn btn-danger">Clear Stored ROCs</button>
       <div class="row">
 
         <div class="col-md-4">
-          <div id="plot_data"></div>
+          <div class="plot-training-data"></div>
         </div>
 
         <div class="col-md-4">
-          <div id="plot_decision_boundary"></div>
+          <div class="plot-validation-data"></div>
         </div>
 
         <div class="col-md-4">
-          <div id="plot_roc"></div>
+          <div class="plot-roc"></div>
         </div>
 
       </div>
 
-    <script src="./bias-variance.js"></script>
+    <script src="main.js"></script>
+    <!-- <script src="./bias-variance.js"></script> -->
   </body>
 
 </html>

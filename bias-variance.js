@@ -6,7 +6,7 @@ Date: May 31, 2020
 
 blobs_data_path = './data/data.csv';
 
-// Data object
+// DATA OBJECT
 // Methods: constructor (load), split
 class Data {
 	constructor(data, name="unnamed") {
@@ -39,7 +39,7 @@ class Data {
 	}
 }
 
-// Analysis object
+// ANALYSIS OBJECT
 // Methods: constructor, set_algorithm, fit, predict
 class Knn {
 	constructor(k=5) {
@@ -92,6 +92,7 @@ class Knn {
 	}
 }
 
+// PERFORMANCE ASSESSMENT
 function roc(state) {
 	let tpr = [], fpr = [], precision = [];
 
@@ -144,6 +145,7 @@ function unique(array) {
 	return uniq;
 }
 
+// INITIALIZE VARIABLE OBJECT
 let state = {
 	probs : [],
 	preds : [],

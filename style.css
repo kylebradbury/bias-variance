@@ -153,7 +153,6 @@ text.key-text{
 }
 
 .label {
-  text-anchor: end;
   font-weight: bold;
   font-size: 12px;
 }
@@ -192,4 +191,52 @@ text.key-text{
 h1 {
   margin-bottom: 0px;
   font-size: 5vw;
+}
+
+
+
+/* a little bit of CSS to make the chart readable */
+.line {
+  fill: none;
+  stroke-width: 4px;
+}
+.axis path, .tick line {
+  fill: none;
+  stroke: #333;
+}
+
+.class-neg {
+  fill: blue;
+}
+
+.class-pos {
+  fill: red;
+}
+
+.class-pred-neg {
+  stroke: blue;
+  fill: none;
+}
+
+.class-pred-pos {
+  stroke: red;
+  fill: none;
+}
+
+.class-neg-boundary {
+  fill: blue;
+  opacity: 0.35;
+}
+
+.class-pos-boundary {
+  fill: red;
+  opacity: 0.35;
+}
+
+.chance-line {
+  stroke: lightgrey;
+}
+
+.roc-line-old {
+  stroke: red;
 }
