@@ -13,209 +13,159 @@
 
 // These should likely be two separate interactives.
 
-let k_options = [15, 99, 1],
-    n_boundary = 50,
-    n_train = 100,
-    n_test = 100;
+class Interactive {
+    constructor() {
+        // Initialize all properties
+        this.k_options = [15, 51, 1];
+        this.n_boundary = 50;
+        this.n_train = 100;
+        this.n_test = 100;
 
+        this.train_data = [];
+        this.test_data = [];
+        this.model = [];
+        this.pred = [];
+        this.probs = [];
+        this.boundary = [];
+        this.metrics = [];
+        this.roc_data = [];
+        this.roc_collection = [];
+        this.chart = [];
+        this.pred_chart = [];
+        this.roc_chart = [];
 
-// create new chart using Chart constructor
-let train_data = new Data({type: 'gaussian', n: n_train}),
-    test_data = new Data({type: 'gaussian', n: n_test});
-
-// Initiate an untrained model
-let model = new KnnModel(k=k_options[0]);
-
-// Fit the model to the training data and make predictions
-model.fit(train_data.data);
-let preds = model.predict(test_data.data),
-    probs = model.predict_proba(test_data.data),
-    boundary = model.predict_boundary({data: test_data.data, extent: test_data.extent, n:n_boundary});
-
-let metrics = new Metrics();
-metrics.setData({
-    data: test_data.data,
-    preds: probs
-});
-let roc_data = metrics.roc(),
-    roc_collection = [];
-
-// Create the scatter chart
-const chart = new ScatterChart({
-	element: document.querySelector('.plot-training-data'),
-    data: train_data.data,
-    extent: train_data.extent,
-    boundary: boundary,
-    axis_labels: {x:"Feature 1", y:"Feature 2"},
-});
-
-// Create the prediction chart
-const pred_chart = new PredictionsChart({
-	element: document.querySelector('.plot-validation-data'),
-    data: test_data.data,
-    extent: test_data.extent,
-    preds: preds,
-    boundary: boundary,
-    axis_labels: {x:"Feature 1", y:"Feature 2"}
-});
-
-// Create the ROC chart
-const roc_chart = new RocChart({
-    element: document.querySelector('.plot-roc'),
-    data: roc_data,
-    roc_collection: roc_collection,
-    axis_labels: {x:"False Positive Rate", y:"True Positive Rate"},
-    extent: {x:[0,1], y:[0,1]}
-});
-
-// *** This section need refactoring so that there is only one update script each time a button is pressed
-
-// change data on click to something randomly-generated
-d3.selectAll('button.train-data').on('click', () => {
-    train_data = new Data({
-        type: 'gaussian',
-        n: n_train
-    });
-
-    model.fit(train_data.data);
-    preds = model.predict(test_data.data);
-    probs = model.predict_proba(test_data.data);
-    boundary = model.predict_boundary({data: test_data.data, extent: test_data.extent, n:n_boundary});
-    metrics.setData({
-        data: test_data.data,
-        preds: probs
-    });
-    roc_data = metrics.roc()
-
-    let train_options = {   
-        data: train_data.data,
-        extent: train_data.extent,
-        boundary: boundary
-    };
-
-    chart.setData(train_options);
-
-    let test_options = {   
-        data: test_data.data,
-        extent: test_data.extent,
-        preds: preds,
-        boundary: boundary
-    };
-    pred_chart.setData(test_options);
-
-
-    let roc_options = {
-        data: roc_data,
-        roc_collection: roc_collection
+        // Build the site
+        this.generate_data_training();
+        this.generate_data_testing();
+        this.reset_model();
+        this.fit_model();
+        this.plot_train_chart();
+        this.plot_test_chart();
+        this.plot_roc_chart();
     }
-    
-    roc_chart.setData(roc_options);
+
+    generate_data_training() {
+        this.train_data = new Data({type: 'gaussian', n: this.n_train});
+    }
+
+    generate_data_testing() {
+        this.test_data = new Data({type: 'gaussian', n: this.n_test});
+    }
+
+    reset_model() {
+        this.model = new KnnModel(this.k_options[0]); 
+    }
+
+    fit_model() {
+        this.model.fit(this.train_data.data);
+        this.preds = this.model.predict(this.test_data.data);
+        this.probs = this.model.predict_proba(this.test_data.data);
+        this.boundary = this.model.predict_boundary({data: this.test_data.data, extent: this.test_data.extent, n:this.n_boundary});
+
+        this.metrics = new Metrics();
+        this.metrics.setData({
+            data: this.test_data.data,
+            preds: this.probs
+        });
+        this.roc_data = this.metrics.roc();
+    }
+
+    plot_train_chart() {
+        this.chart = new ScatterChart({
+            element: document.querySelector('.plot-training-data'),
+            data: this.train_data.data,
+            extent: this.train_data.extent,
+            boundary: this.boundary,
+            axis_labels: {x:"Feature 1", y:"Feature 2"},
+        });
+    }
+
+    plot_test_chart() {
+        this.pred_chart = new PredictionsChart({
+            element: document.querySelector('.plot-validation-data'),
+            data: this.test_data.data,
+            extent: this.test_data.extent,
+            preds: this.preds,
+            boundary: this.boundary,
+            axis_labels: {x:"Feature 1", y:"Feature 2"}
+        });
+    }
+
+    plot_roc_chart() {
+        this.roc_chart = new RocChart({
+            element: document.querySelector('.plot-roc'),
+            data: this.roc_data,
+            roc_collection: this.roc_collection,
+            axis_labels: {x:"False Positive Rate", y:"True Positive Rate"},
+            extent: {x:[0,1], y:[0,1]}
+        });
+    }
+
+}
+
+// Initiate the plot
+let app = new Interactive();
+
+// Interact with the plot through button clicks
+
+// Generate new training data
+d3.selectAll('button.train-data').on('click', () => {
+    app.generate_data_training();
+    app.fit_model();
+    app.plot_train_chart();
+    app.plot_test_chart();
+    app.plot_roc_chart();
 });
 
 d3.selectAll('button.test-data').on('click', () => {
-    test_data = new Data({
-        type: 'gaussian',
-        n: n_test
-    });
-    // model.fit(train_data.data);
-    // chart.setData(train_data.data);
-    // model.fit(train_data.data);
-    preds = model.predict(test_data.data);
-    probs = model.predict_proba(test_data.data);
-    boundary = model.predict_boundary({data: test_data.data, extent: test_data.extent, n:n_boundary});
-    metrics.setData({
-        data: test_data.data,
-        preds: probs
-    });
-    roc_data = metrics.roc()
-
-    let test_options = {   
-        element: document.querySelector('.plot-validation-data'),
-        data: test_data.data,
-        extent: test_data.extent,
-        preds: preds,
-        boundary: boundary
-    };
-    pred_chart.setData(test_options);
-
-    let roc_options = {
-        data: roc_data,
-        roc_collection: roc_collection
-    }
-    
-    roc_chart.setData(roc_options);
-
+    app.generate_data_testing();
+    app.fit_model();
+    app.plot_train_chart();
+    app.plot_test_chart();
+    app.plot_roc_chart();
 });
 
 
 d3.selectAll('button.save-roc').on('click', () => {
-    roc_collection.push(roc_data);
-
-    let roc_options = {
-        data: metrics.roc(),
-        roc_collection: roc_collection
-    }
-    
-    roc_chart.setData(roc_options);
+    app.roc_collection.push(app.roc_data);
+    app.plot_roc_chart();
 });
 
 d3.selectAll('button.clear-roc').on('click', () => {
-    roc_collection = [];
-
-    let roc_options = {
-        data: metrics.roc(),
-        roc_collection: roc_collection
-    }
-    
-    roc_chart.setData(roc_options);
+    app.roc_collection = [];
+    app.plot_roc_chart();
 });
 
 d3.selectAll('button.cycle-k').on('click', () => {
     // Cycle through k values
-    k_options.push(k_options.shift(0));
+    app.k_options.push(app.k_options.shift(0));
 
     // Update the button information to match
-    document.getElementsByClassName('cycle-k')[0].innerHTML = 'K = ' + k_options[0];
+    document.getElementsByClassName('cycle-k')[0].innerHTML = 'K = ' + app.k_options[0];
 
-    model = new KnnModel(k=k_options[0]);
-    roc_collection = [];
+    // Refit and redraw all
+    app.reset_model();
+    app.fit_model();
+    app.plot_train_chart();
+    app.plot_test_chart();
+    app.plot_roc_chart();
+});
 
-    model.fit(train_data.data);
-    preds = model.predict(test_data.data);
-    probs = model.predict_proba(test_data.data);
-    boundary = model.predict_boundary({data: test_data.data, extent: test_data.extent, n:n_boundary});
-    metrics.setData({
-        data: test_data.data,
-        preds: probs
-    });
-    roc_data = metrics.roc()
-
-    let train_options = {   
-        data: train_data.data,
-        extent: train_data.extent,
-        boundary: boundary
-    };
-
-    chart.setData(train_options);
-
-    let test_options = {   
-        data: test_data.data,
-        extent: test_data.extent,
-        preds: preds,
-        boundary: boundary
-    };
-    pred_chart.setData(test_options);
-
-
-    let roc_options = {
-        data: roc_data,
-        roc_collection: roc_collection
+// Run 25 trials sequentially fitting the model and saving the ROC
+d3.selectAll('button.trials').on('click', () => {
+    for (let i = 0; i < 100; i++) {
+        app.roc_collection.push(app.roc_data);
+        app.generate_data_training();
+        app.fit_model();
     }
-    
-    roc_chart.setData(roc_options);
+
+    // Redraw all
+    app.plot_train_chart();
+    app.plot_test_chart();
+    app.plot_roc_chart();
 });
 
 // redraw chart on each resize
 // in a real-world example, it might be worth ‘throttling’ this
 // more info: http://sampsonblog.com/749/simple-throttle-function
-d3.select(window).on('resize', () => {chart.draw(); pred_chart.draw(); roc_chart.draw();} );
+d3.select(window).on('resize', () => {app.chart.draw(); app.pred_chart.draw(); app.roc_chart.draw();} );

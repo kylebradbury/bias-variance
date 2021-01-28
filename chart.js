@@ -86,7 +86,7 @@ class Chart {
             .attr("text-anchor", "end")
             .attr("alignment-baseline", "bottom")
             .attr("x", this.xScale(this.extent.x[1]))
-            .attr("y", this.yScale(this.extent.y[0]))
+            .attr("y", this.yScale(this.extent.y[0])+30) // Add offsets to move to easier to read locations
             .text(this.axis_labels.x);
 
         // Y-Label
@@ -95,7 +95,7 @@ class Chart {
             .attr("text-anchor", "end")
             .attr("alignment-baseline", "hanging")
             .attr("x", this.xScale(this.extent.x[0]))
-            .attr("y", this.yScale(this.extent.y[1]))
+            .attr("y", this.yScale(this.extent.y[1])-40) // Add offsets to move to easier to read locations
             .attr("transform", "rotate(-90)")
             .text(this.axis_labels.y);
     }

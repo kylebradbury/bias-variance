@@ -12,7 +12,8 @@ class Data {
     
     // Data creation functions
     generate_data_gaussian(frac_pos=0.5) {
-        let mean = [[-1,1],[1,-1]],
+        let v = 0.5,
+            mean = [[-v,v],[v,-v]],
             std = [1,1];
 
         let data = [];

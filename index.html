@@ -23,35 +23,36 @@
   <body>
     <div class=container-fluid>
       <!-- Bias Variance Explorer Section -->
-      <!-- <h1 class="font-weight-light">Bias Variance Explorer</h1> -->
-      <div class="row"></div>
-        <!-- here's the div our chart will be injected into -->
-        <div class="chart-container"></div>
+      <h1 class="font-weight-light">Bias Variance Explorer</h1>
 
-        <!-- these will be made useful in the script below -->
-        <button class="train-data btn btn-primary">Change Training Data</button>
-        <!-- <button class="test-data btn btn-primary">Change Test Data</button> -->
-        <button class="save-roc btn btn-primary">Save ROC Curve</button>
-        <button class="cycle-k btn btn-primary">K = 25</button> 
-        <button class="clear-roc btn btn-danger">Clear Stored ROCs</button>
       <div class="row">
 
         <div class="col-md-4">
+          <h2>Training Data</h2>
           <div class="plot-training-data"></div>
         </div>
 
         <div class="col-md-4">
+          <h2>Test Data</h2>
           <div class="plot-validation-data"></div>
         </div>
 
         <div class="col-md-4">
+          <h2>ROC Curve</h2>
           <div class="plot-roc"></div>
         </div>
 
       </div>
 
+      <button class="train-data btn btn-primary">Change Training Data</button>
+      <!-- <button class="test-data btn btn-primary">Change Test Data</button> -->
+      <button class="save-roc btn btn-primary">Save ROC Curve</button>
+      <button class="cycle-k btn btn-primary">K = 25</button> 
+      <button class="trials btn btn-primary">Run 100 Trials</button> 
+      <button class="clear-roc btn btn-danger">Clear Stored ROCs</button>
+
     <script src="main.js"></script>
-    <!-- <script src="./bias-variance.js"></script> -->
+
   </body>
 
 </html>
